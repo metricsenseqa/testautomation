@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Excel Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  </head>
+  <body>
+    <form class="w3-container w3-card-4">
+      <h2 class="w3-text-blue">Simple Excel Generator</h2>
+    <div>
+      <label class="w3-text-blue" for="input1">taskid : </label>
+      <input class="w3-input w3-border" type="text" id="input1">
+    </div>
+    <div>
+      <label class="w3-text-blue" for="input2">name : </label>
+      <input class="w3-input w3-border" type="text" id="input2">
+    </div>
+    <div>
+      <label class="w3-text-blue" for="input3">phone : </label>
+      <input class="w3-input w3-border" type="text" id="input3">
+    </div>
+    <div>
+      <label class="w3-text-blue" for="input4">city : </label>
+      <input class="w3-input w3-border" type="text" id="input4">
+    </div>
+    <br/>
+    <button id="btn1" class="w3-btn w3-blue" onclick="generateExcel()">Generate Excel</button>
+    <br/><br/>
+    </form>
+    <script type="text/javascript">
+      function generateExcel() {
+  // Get the input values
+  const input1 = document.getElementById("input1").value;
+  const input2 = document.getElementById("input2").value;
+  const input3 = document.getElementById("input3").value;
+  const input4 = document.getElementById("input4").value;
+
+  // Create the workbook and sheet
+  const workbook = XLSX.utils.book_new();
+  const sheet = XLSX.utils.json_to_sheet([
+    { Input1: input1, Input2: input2, Input3: input3, Input4: input4 },
+  ]);
+
+  // Add the sheet to the workbook
+  XLSX.utils.book_append_sheet(workbook, sheet, "Sheet1");
+
+  // Generate the Excel file and download it
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+  downloadExcel(excelBuffer, input1 + "-ui.xlsx");
+}
+
+function downloadExcel(buffer, filename) {
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+}
+    </script>
+  </body>
+</html>
